@@ -1,0 +1,6 @@
+{
+    "imports": {
+        "vue": "./vue.esm-browser.js",
+        "element-plus": "element-plus.module.js"
+    }
+}

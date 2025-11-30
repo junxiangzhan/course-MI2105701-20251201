@@ -1,0 +1,126 @@
+
+#navbar {
+    display: grid;
+    grid: auto 0fr / auto auto;
+    flex-wrap: wrap;
+    position: fixed;
+    padding: 0 1.5rem;
+    background-color: #a62600;
+    width: 100vw;
+    transition: grid-template .5s;
+    z-index: 2000;
+
+    @media (min-width: 768px) {
+        display: flex;
+        align-items: center;
+    }
+
+    &:has(.navbar-toggler :checked) {
+        grid: auto 1fr / auto auto;
+    }
+
+    .navbar-brand {
+        justify-self: start;
+        display: flex;
+        gap: .5rem;
+        margin: .5rem;
+        color: rgb(255, 243, 243);
+        font-size: 1.5rem;
+        font-family: 'Noto Serif TC';
+        font-weight: bold;
+        line-height: 3rem;
+        letter-spacing: .1em;
+        text-decoration: none;
+
+
+        img {
+            height: 3rem;
+            padding: .5rem 0;
+            margin-right: .5rem;
+        }
+        
+    }
+
+    .navbar-toggler {
+        justify-self: end;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2rem;
+        height: 2rem;
+        border: 0;
+        border-radius: 4px;
+        background-color: none;
+        margin: 18px 0;
+        color: #fff;
+        opacity: .75;
+        cursor: pointer;
+        transition: .25s;
+
+        @media (min-width: 768px) {
+            display: none;
+        }
+
+        &:hover {
+            opacity: .9;
+            background-color: #8f2100;
+        }
+
+        &:active {
+            opacity: 1;
+            background-color: #8f2100;
+        }
+    }
+
+    .navbar-collapse {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        grid-column: 2 span;
+        justify-content: space-between;
+        overflow: hidden;
+
+        @media (min-width: 768px) {
+            flex-direction: row;
+        }
+    }
+
+    .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        padding: .5rem 0;
+        margin: 0;
+
+        @media (min-width: 768px) {
+            flex-direction: row;
+            gap: .5rem;
+        }
+    }
+
+    .nav-item {
+        list-style: none;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .5rem;
+        border-radius: 4px;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        opacity: 0.75;
+        transition: .25s;
+
+        &:hover {
+            opacity: .9;
+            background-color: #8f210080;
+        }
+
+        &:active {
+            opacity: 1;
+            background-color: #8f2100;
+        }
+    }
+}

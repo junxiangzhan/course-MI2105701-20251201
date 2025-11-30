@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>讓仁藝術學院 | 東花浪人季</title>
+    <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon">
+    <!-- Preload -->
+    <link rel="preload" href="./images/101.jpg" as="image">
+    <link rel="preload" href="./images/102.jpg" as="image">
+    <link rel="preload" href="./images/103.jpg" as="image">
+    <link rel="preload" href="./images/104.jpg" as="image">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./stylesheets/element-plus.css">
+    <link rel="stylesheet" href="./stylesheets/fontawesome.css">
+    <link rel="stylesheet" href="./stylesheets/index.css">
+    <!-- Use import map to let element-plus can import Vue. (External import maps are not yet supported.) -->
+    <!-- Or directly edit the import of element-plus as the file of vue. -->
+    <script type="importmap">
+        {
+            "imports": {
+                "vue": "/scripts/vue.esm-browser.js",
+                "element-plus": "/scripts/element-plus.module.js"
+            }
+        }
+    </script>
+    <!-- Scripts -->
+    <script type="module" src="./scripts/index.js" async></script>
+</head>
+
+<body>
+    <!-- <el-scrollbar height="100vh"> -->
+        <nav id="navbar">
+            <a href="#top" class="navbar-brand">
+                <img src="./images/logo.png" alt="">
+                讓仁藝術學院
+            </a>
+            <label class="navbar-toggler">
+                <input id="navbar-toggle-control" type="checkbox" hidden>
+                <i class="fas fa-bars"></i>
+            </label>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a href="#news" class="nav-link">最新消息</a></li>
+                    <li class="nav-item"><a href="#events" class="nav-link">近期活動</a></li>
+                    <!-- <li class="nav-item"><a href="#guided" class="nav-link">會場導覽</a></li> -->
+                    <li class="nav-item"><a href="#contest" class="nav-link">競賽作品</a></li>
+                    <li class="nav-item"><a href="#sign-up" class="nav-link">活動報名</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" v-if="user">
+                        <a href="#sign-up" class="nav-link">
+                            <i class="far fa-user"></i> {{ user.name }}
+                        </a>
+                    </li>
+                    <li class="nav-item" v-else>
+                        <a href="#login" class="nav-link" @click.prevent="loginForm.isVisible = true">
+                            <i class="far fa-user"></i> 登入
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#search" class="nav-link" @click.prevent="searchForm.isVisible = true">
+                            <i class="fas fa-search"></i> 搜尋
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <section id="top-container">
+            <a name="top"></a>
+            <el-carousel trigger="click" height="100vh" :pause-on-hover="false" arrow="never">
+                <el-carousel-item key="1">
+                    <div class="banner-item" style="--banner: url('/images/101.jpg')">
+                        <h1>六年在地深耕 塑造藝術美學</h1>
+                        <h2>學院堅持六年藝術深造 立志全球第一</h2>
+                    </div>
+                </el-carousel-item>
+                <el-carousel-item key="2">
+                    <div class="banner-item" style="--banner: url('/images/102.jpg')">
+                        <h1>東花浪人季 放眼國際交流</h1>
+                        <h2>六週年校慶活動 建立國際交流橋梁</h2>
+                    </div>
+                </el-carousel-item>
+                <el-carousel-item key="3">
+                    <div class="banner-item" style="--banner: url('/images/103.jpg')">
+                        <h1>藝術競賽 打開大眾藝術之窗</h1>
+                        <h2>即時線上參與 誠請您的獨道眼光</h2>
+                    </div>
+                </el-carousel-item>
+                <el-carousel-item key="4">
+                    <div class="banner-item" style="--banner: url('/images/104.jpg')">
+                        <h1>學院瑰麗山川 增廣所見所聞</h1>
+                        <h2>東花美景 享受獨屬於大自然的歡樂頌</h2>
+                    </div>
+                </el-carousel-item>
+            </el-carousel>
+            <div class="container">
+                <div class="center">
+                    <img class="logo" src="./images/brand-white.png">
+                    <span class="brand">讓仁藝術學院</span>
+                    <span class="slogan">教育英才 應材施教</span>
+                </div>
+            </div>
+        </section>
+
+        <div id="news-container">
+            <a name="news"></a>
+            <div class="title">
+                <h1>最新消息</h1>
+                <h2>Latest News</h2>
+            </div>
+            <div class="news-container">
+                <div class="news-row" v-for="news, index in newsList" :key="news.title">
+                    <div class="news-item"
+                        @click="newsDetail.id = (newsPage - 1) * newsPageSize + index; newsDetail.isVisible = true;">
+                        <div class="news-header">
+                            <div class="news-title">{{ news.title }}</div>
+                            <div class="news-date"><i class="fas fa-calendar-day"></i> {{ news.date }}</div>
+                        </div>
+                        <div class="news-content" v-html="news.content"></div>
+                    </div>
+                </div>
+            </div>
+            <el-pagination layout="prev, pager, next" v-model:current-page="newsPage" :total="news.length"
+                :page-size="newsPageSize" />
+        </div>
+
+        <section id="events-container">
+            <a name="events"></a>
+            <div class="title">
+                <h1>近期活動</h1>
+                <h2>Recent Events</h2>
+            </div>
+            <el-row>
+                <el-col :span="24" :md="12" :lg="8">
+                    <div class="block calender-block">
+                        <div class="calender">
+                            <div class="calendar-container">
+                                <div class="calendar-header">
+                                    March
+                                </div>
+                                <span class="calendar-span" style="--row: 1; --span: 7"></span>
+                                <span class="calendar-span" style="--row: 2;"
+                                    :style="`--span: ${eventCalendar.startDate.getDay()}`"></span>
+                                <!-- <el-tooltip v-for="date in (eventCalendar.endDate - eventCalendar.startDate) / 864e5"
+                                    effect="light">
+                                    <div class="calendar-date" :class="events[date].detail && `has-detail`"
+                                        @click="events[date].detail && (eventCalendar.select = date);">
+                                        {{ date }}
+                                    </div>
+                                    <template #content>
+                                        <div class="date-info">
+                                            <h1>{{ events[date].title }}</h1>
+                                            <small><i class="far fa-hourglass-half"></i> {{ events[date].time }}</small>
+                                            <p>{{ events[date].description }}</p>
+                                        </div>
+                                    </template>
+                                </el-tooltip> -->
+                                <div class="calendar-date" :class="events[date].detail && `has-detail`"
+                                    @click="events[date].detail && (eventCalendar.select = date);"
+                                    v-for="date in (eventCalendar.endDate - eventCalendar.startDate) / 864e5">
+                                    {{ date }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-col>
+                <el-col :span="24" :md="12" :lg="9">
+                    <div class="block event-block">
+                        <el-scrollbar>
+                            <div class="event-header">
+                                <div class="event-title">{{ events[eventCalendar.select].title }}</div>
+                                <div class="event-datetime"><i class="far fa-calendar"></i>
+                                    03-{{`${eventCalendar.select}`.replace(/(?=^\d$)/, '0')}} {{
+                                    events[eventCalendar.select].time }}</div>
+                            </div>
+                            <div class="event-content">
+                                {{ events[eventCalendar.select].description }}
+                            </div>
+                            <div class="event-datail">
+                                {{ events[eventCalendar.select].detail }}
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                </el-col>
+                <el-col :span="24" :md="0" :lg="7">
+                    <img class="img block sculpture" src="./images/301.png" alt="A Painting of Sculpture">
+                </el-col>
+            </el-row>
+        </section>
+
+        <section id="guided-container" hidden>
+            <a name="guided"></a>
+        </section>
+
+        <section id="contest-container">
+            <a name="contest"></a>
+            <div class="title">
+                <h1>競賽作品</h1>
+                <h2>Contest Entries</h2>
+            </div>
+            <div class="container">
+                <div class="entry-list">
+                    <div class="entry" :style="`--deg: calc((${entryId} + ${index}) / ${entries.length} * 360deg)`"
+                        v-for="entry, index in entries">
+                        <img :src="entry.image" alt="">
+                    </div>
+                </div>
+                <div class="entry-info-container">
+                    <div class="entry-info">
+                        <div class="entry-switch">
+                            <button type="button" @click="entryId++;"><i class="fas fa-chevron-left"></i></button>
+                            <div class="entry-name">{{ currentEntry.name }}</div>
+                            <button type="button" @click="entryId--;"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <el-scrollbar height="100%" view-class="entry-description-container">
+                            <div class="entry-description">
+                                {{ currentEntry.description }}
+                            </div>
+                        </el-scrollbar>
+                        <button class="vote-button" :class="entries[user?.vote] == currentEntry ? 'voted': 'unvoted'"
+                            @click="voteForCurrentEntry" :key="entryId">
+                            <i class="fa-stack">
+                                <i class="fas fa-heart fa-stack-1x"></i>
+                                <i class="far fa-heart fa-stack-1x"></i>
+                            </i>
+                            {{ currentEntry.votes }}
+                            votes.
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- <p style="text-align: center; font-weight: 300; margin: 1.5rem;">你好啊 ヾ(•ω•`)o </p> -->
+
+        <section id="sign-up-container">
+            <a name="sign-up"></a>
+            <div class="container">
+                <div class="block">
+                    <div class="title">
+                        <h1><span>活動報名</span></h1>
+                        <h2><span>Activity Sign-up</span></h2>
+                    </div>
+                    <div class="segment">
+                        <h3>活動內容</h3>
+                        <p>
+                            本次的作品投票活動為了讓我們學生被大眾所見，特別邀請您投下保貴的一票。此外，我們還將在所有投票者中出抽數位，以贈送精美好禮！
+                            <br>
+                            <br>
+                            為保本次的競賽作品投票的有效性，需要每個人利用個人電話實名登記。若想要參加本次活動，請填寫下方的信息表格，請填寫正確地址，以便配送獎品，若未填寫或填寫錯誤，我們將視為放棄獎品。
+                        </p>
+                    </div>
+                    <div class="segment" v-if="user">
+                        <h3>您的報名信息</h3>
+                        <el-form @submit.prevent="logout()">
+                            <el-form-item label="稱　　謂" prop="name">
+                                <el-input v-model="user.name" readonly>
+                                    <template #prefix><i class="far fa-user" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="電話號碼" prop="phoneNumber">
+                                <el-input v-model="user.phoneNumber" :formatter="signUpForm.phoneNumberFormatter"
+                                    :parser="signUpForm.phoneNumberParser" readonly>
+                                    <template #prefix><i class="fas fa-hashtag" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="註冊信箱" prop="email">
+                                <el-input v-model="user.email" type="email" readonly>
+                                    <template #prefix><i class="far fa-envelope" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="地址資訊" prop="address">
+                                <el-input v-model="user.address" readonly>
+                                    <template #prefix><i class="far fa-building" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <span style="margin-left: auto;"></span>
+                                <el-button native-type="submit">登出</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                    <div class="segment" v-else>
+                        <h3>報名信息</h3>
+                        <el-form ref="signUpForm" :model="signUpForm" :rules="signUpForm.rules" hide-required-asterisk
+                            @submit.prevent="signUp()">
+                            <el-form-item label="稱　　謂" prop="name">
+                                <el-input v-model="signUpForm.name" clearable>
+                                    <template #prefix><i class="far fa-user" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="電話號碼" prop="phoneNumber">
+                                <el-input v-model="signUpForm.phoneNumber" :formatter="signUpForm.phoneNumberFormatter"
+                                    :parser="signUpForm.phoneNumberParser" clearable>
+                                    <template #prefix><i class="fas fa-hashtag" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="註冊信箱" prop="email">
+                                <el-input v-model="signUpForm.email" type="email" clearable>
+                                    <template #prefix><i class="far fa-envelope" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="地址資訊" prop="address">
+                                <el-input v-model="signUpForm.address">
+                                    <template #prefix><i class="far fa-building" style="width: 1rem;"></i></template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <span style="margin-left: auto;"></span>
+                                <el-button native-type="submit" :loading="signUpForm.isLoading">
+                                    {{signUpForm.isLoading ? '請稍後' : '報名'}}
+                                </el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="information" hidden>
+            <h1>聯絡方式</h1>
+        </footer>
+    <!-- </el-scrollbar> -->
+
+    <div id="chat-toggler" @click="chatBot.visible = !chatBot.visible">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <div id="chat" :class="chatBot.visible ? 'visible' : ''">
+        <div class="chat-header">讓仁對話通</div>
+        <div class="chat-message-list">
+            <div class="chat-message" v-for="chat in chatBot.chats" :class="chat.type">{{ chat.message }}</div>
+        </div>
+        <form class="chat-footer">
+            <input type="text" placeholder="輸入訊息..." v-model="chatBot.message" @keydown.enter.prevent="sendChatMessage">
+            <button type="submit" @click.prevent="sendChatMessage"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+
+    <el-dialog v-model="voteAlert.isVisible" :align-center="true" title="此網站顯示">
+        <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+            需要先登入，才能進行投票哦！
+            <el-button text type="primary"
+                @click="voteAlert.isVisible = false; loginForm.isVisible = true">立即登入</el-button>
+        </div>
+        <template #footer>
+            <el-button native-type="button" type="primary" plain @click="voteAlert.isVisible = false;">確定</el-button>
+        </template>
+    </el-dialog>
+
+    <el-dialog v-model="alertDialog.isVisible" :align-center="true" title="此網站顯示">
+        <p style="margin: 0;">{{ alertDialog.message }}</p>
+        <template #footer>
+            <el-button native-type="button" type="primary" plain @click="alertDialog.isVisible = false;">確定</el-button>
+        </template>
+    </el-dialog>
+
+    <el-dialog v-model="newsDetail.isVisible" :align-center="true">
+        <template #header="{ close, titleId, titleClass }">
+            <div :id="titleId" :class="titleClass">
+                {{ news[newsDetail.id].title }}
+            </div>
+        </template>
+        <p style="margin: 0;"><i class="far fa-calendar"></i> {{ news[newsDetail.id].date }}</p>
+        <p v-html="news[newsDetail.id].content"></p>
+        <template #footer>
+            <el-button native-type="button" type="primary" plain @click="newsDetail.isVisible = false;">確定</el-button>
+        </template>
+    </el-dialog>
+
+    <el-dialog v-model="loginForm.isVisible" :align-center="true">
+        <template #header="{ close, titleId, titleClass }">
+            <span :id="titleId" :class="titleClass"><i class="far fa-user"></i> 登入</span>
+        </template>
+        <el-form ref="loginForm" :model="loginForm" :rules="loginForm.rules" @submit.prevent="login"
+            hide-required-asterisk>
+            <el-form-item label="電話號碼" prop="phoneNumber">
+                <el-input v-model="loginForm.phoneNumber" :formatter="loginForm.phoneNumberFormatter"
+                    :parser="loginForm.phoneNumberParser" clearable>
+                    <template #prefix><i class="fas fa-hashtag" style="width: 1rem;"></i></template>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="註冊信箱" prop="email">
+                <el-input v-model="loginForm.email" type="email">
+                    <template #prefix><i class="far fa-envelope" style="width: 1rem;"></i></template>
+                </el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button native-type="button" type="primary" text
+                    @click="scrollTo('#sign-up'); loginForm.isVisible = false;">還沒有帳號？立即報名</el-button>
+                <span style="margin-left: auto;"></span>
+                <el-button native-type="button" type="info" plain @click="loginForm.isVisible = false;">取消</el-button>
+                <el-button native-type="submit" type="primary" :loading="loginForm.isLoading" plain>登入</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+    <el-dialog v-model="searchForm.isVisible" :align-center="true">
+        <template #header="{ close, titleId, titleClass }">
+            <span :id="titleId" :class="titleClass"><i class="fas fa-search"></i> 搜尋</span>
+        </template>
+        <el-form :model="searchForm">
+            <el-form-item>
+                <el-input v-model="searchForm.query">
+                    <template #prefix><i class="fas fa-search" style="width: 1rem;"></i></template>
+                </el-input>
+            </el-form-item>
+        </el-form>
+        <div style="margin-top: 1rem; max-height: calc(100vh - 16rem); overflow-y: auto">
+            <div class="search-row" v-for="item in searchList" :key="item.title">
+                <div class="search-item" @click="searchAction(item);">
+                    <div class="search-header">{{ item.title }}</div>
+                    <div class="search-keywords">{{ item.keywords }}</div>
+                </div>
+            </div>
+        </div>
+    </el-dialog>
+</body>
+
+</html>

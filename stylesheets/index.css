@@ -913,6 +913,7 @@ a[name] {
   position: fixed;
   bottom: 1rem;
   right: 2rem;
+  text-align: center;
 }
 
 #chat {

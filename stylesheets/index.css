@@ -909,11 +909,13 @@ a[name] {
   border-radius: 0.5rem;
   background: #a62600;
   color: white;
-  font-size: 2rem;
+  font-size: 1.5rem;
   position: fixed;
   bottom: 1rem;
-  right: 2rem;
-  text-align: center;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #chat {
@@ -925,14 +927,14 @@ a[name] {
   position: fixed;
   bottom: 5.5rem;
   right: 0rem;
-  transform: translateX(calc(100% + 2rem));
+  transform: translateX(calc(100% + 1rem));
   transition: right 0.5s, transform 0.5s;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 #chat.visible {
-  right: 2rem;
+  right: 1rem;
   transform: translateX(0);
 }
 #chat .chat-header {
